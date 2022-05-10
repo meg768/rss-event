@@ -1,1 +1,1 @@
-# rss-event
+# rss-headlines

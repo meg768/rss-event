@@ -1,24 +1,23 @@
 {
-  "name": "rss-event",
+  "name": "rss-headlines",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "rss-headlines.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "git-pull": "git pull",
     "git-commit": "git add -A && git commit -m '-' && git push",
     "git-revert": "git reset --hard HEAD"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/meg768/rss-event.git"
+    "url": "git+https://github.com/meg768/rss-headlines.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/meg768/rss-event/issues"
+    "url": "https://github.com/meg768/rss-headlines/issues"
   },
-  "homepage": "https://github.com/meg768/rss-event#readme",
+  "homepage": "https://github.com/meg768/rss-headlines#readme",
   "dependencies": {
     "rss-parser": "^3.12.0"
   }

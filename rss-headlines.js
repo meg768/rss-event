@@ -9,13 +9,18 @@ module.exports = class extends Events {
 	constructor(options) {
 		super();
 
-		let {feeds} = options;
+		let {debug, interval = 1000 * 60 * 5, log, feeds} = options;
 
-		this.debug = console.log;
-		this.log = console.log;
+		this.debug = typeof debug == 'function' ? debug : () => {};
+		this.log = typeof log == 'function' ? log : () => {};
+		this.interval = interval;
 		this.parser = new Parser();
+		this.timer = undefined;
 		this.cache = {};
 		this.feeds = feeds;
+
+		this.start();
+
 
 	}
 
@@ -33,14 +38,11 @@ module.exports = class extends Events {
 
 		});
 
-//		console.log(result.items);
-
 		let lastItem = result.items[0];
 		let title = lastItem.title;
 		let link = lastItem.link;
 		let content = lastItem.contentSnippet;
 		let date = new Date(lastItem.isoDate);
-
 
 		return {title:title, content:content, link:link, date:date};
     }
@@ -49,6 +51,8 @@ module.exports = class extends Events {
 
 		try {
 
+			let headlines = [];
+
 			for (let i = 0; i < this.feeds.length; i++) {
 				let feed = this.feeds[i];
 
@@ -56,7 +60,7 @@ module.exports = class extends Events {
 					let rss = await this.fetchURL(feed.url);
 
 					if (this.cache[feed.name] == undefined || JSON.stringify(rss) != JSON.stringify(this.cache[feed.name])) {
-						this.emit('rss', {name:feed.name, url:feed.url, time:rss.date, title:rss.title, content:rss.content});
+						headlines.push({name:feed.name, url:feed.url, date:rss.date, title:rss.title, content:rss.content});
 						this.cache[feed.name] = rss;
 					}
 				}
@@ -65,7 +69,16 @@ module.exports = class extends Events {
 				}
 
 			}
-	
+
+			headlines.sort((a, b) => {
+				return a.date.valueOf() - b.date.valueOf();
+			});
+			
+			for (let headline of headlines) {
+				this.emit('headline', headline);
+
+			}
+
 		}
 		catch(error) {
 			this.log(error);
@@ -74,21 +87,33 @@ module.exports = class extends Events {
 
 	}
 
-	async loop() {
-		try {
-			await this.fetch();
-		}
-		catch (error) {
-			this.log(error);
-		}
-		finally {
-			setTimeout(this.loop.bind(this), 1000 * 60 * 0.3);
-		}
+	start() {
+
+		let loop = async () => {
+			try {
+				await this.fetch();
+			}
+			catch (error) {
+				this.log(error);
+			}
+			finally {
+				this.debug(`Fetching again in ${this.interval / 1000} seconds...`);
+				this.stop();	
+				this.timer = setTimeout(loop, this.interval);
+			}
+		};
+
+		this.stop();
+
+		this.timer = setTimeout(loop, 0);
 	}
 
-
-	async monitor() {
-		await this.loop();
+	stop() {
+		if (this.timer != undefined) {
+			clearTimeout(this.timer);
+			this.timer = undefined;
+		}	
 	}
+
 }
 
