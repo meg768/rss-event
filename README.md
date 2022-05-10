@@ -24,7 +24,7 @@ class App {
 		setTimeout(() => {
 			console.log('Finished.');
 			this.headlines.stop();
-		}, 1000 * 15 * 60);
+		}, 1000 * 30 * 60);
 
 		// Display headline
 		this.headlines.on('headline', (rss) => {
