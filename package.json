@@ -1,14 +1,14 @@
 {
   "name": "rss-headlines",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "rss-headlines.js",
   "scripts": {
     "git-pull": "git pull",
     "git-commit": "git add -A && git commit -m '-' && git push",
     "git-revert": "git reset --hard HEAD",
-	"npm-publish": "npm publish",
-	"npm-version-patch": "npm version patch"	
+    "npm-publish": "npm publish",
+    "npm-version-patch": "npm version patch"
   },
   "repository": {
     "type": "git",
