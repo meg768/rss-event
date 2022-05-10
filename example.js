@@ -15,7 +15,7 @@ class App {
 		];
 
 		// Create new headlines. Poll every 60 seconds.
-		this.headlines = new Headlines({feeds:feeds, interval:1000 * 60, xdebug:console.log, xlog:console.log});
+		this.headlines = new Headlines({feeds:feeds, interval:1000 * 60, debug:console.log, log:console.log});
 
 		// Stop fetching after 30 minutes
 		setTimeout(() => {
