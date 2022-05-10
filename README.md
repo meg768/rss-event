@@ -1,8 +1,5 @@
 # RSS Headlines
-Adds support for Socket.IO to Homey.
-
-## A simple way to fetch RSS feeds.
-Below is a short example how this module may be used.
+A simple way to fetch RSS feeds. Below is a short example how this module may be used.
 
 ````javascript
 
@@ -38,5 +35,5 @@ class App {
 
 new App();
 
-````javascript
+````
 
