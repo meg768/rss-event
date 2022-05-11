@@ -17,15 +17,23 @@ class App {
 		// Create new headlines. Poll every 60 seconds.
 		this.headlines = new Headlines({feeds:feeds, interval:1000 * 60, debug:console.log, log:console.log});
 
-		// Stop fetching after 60 minutes
+		// Stop fetching after 30 minutes
 		setTimeout(() => {
 			console.log('Finished.');
 			this.headlines.stop();
 		}, 1000 * 60 * 60);
 
+		let cache = {};
+
 		// Display headline
 		this.headlines.on('headline', (rss) => {
-			console.log(`${rss.date.toLocaleTimeString()}: ${rss.name} - ${rss.title}`);
+			let output = `${rss.date.toLocaleTimeString()}: ${rss.name} - ${rss.title}`;
+
+			if (cache[output] != undefined)
+				console.log('******************************', output);
+
+			cache[output] = output;
+			console.log(output);
 		});
 	}
 }

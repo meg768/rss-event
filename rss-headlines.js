@@ -50,7 +50,6 @@ module.exports = class extends Events {
 	async fetch() {
 
 		try {
-
 			let headlines = [];
 
 			for (let i = 0; i < this.feeds.length; i++) {
@@ -58,8 +57,9 @@ module.exports = class extends Events {
 
 				try {
 					let rss = await this.fetchURL(feed.url);
+					let cache = this.cache[feed.name];
 
-					if (this.cache[feed.name] == undefined || JSON.stringify(rss) != JSON.stringify(this.cache[feed.name])) {
+					if (cache == undefined || cache.date < rss.date) {
 						headlines.push({name:feed.name, url:feed.url, date:rss.date, title:rss.title, content:rss.content});
 						this.cache[feed.name] = rss;
 					}
@@ -70,10 +70,12 @@ module.exports = class extends Events {
 
 			}
 
+			// Sort the headlines according to date
 			headlines.sort((a, b) => {
 				return a.date.valueOf() - b.date.valueOf();
 			});
 			
+			// Emit
 			for (let headline of headlines) {
 				this.emit('headline', headline);
 
@@ -103,8 +105,10 @@ module.exports = class extends Events {
 			}
 		};
 
+		// Stop what ever is going on
 		this.stop();
 
+		// Start monitoring
 		this.timer = setTimeout(loop, 0);
 	}
 
