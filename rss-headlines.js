@@ -20,8 +20,6 @@ module.exports = class extends Events {
 		this.feeds = feeds;
 
 		this.start();
-
-
 	}
 
     async fetchURL(url) {
