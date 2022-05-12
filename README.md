@@ -19,7 +19,8 @@ class App {
 
 		// Create new headlines. Poll every 60 seconds.
 		this.headlines = new Headlines({feeds:feeds, interval:1000 * 60, debug:console.log, log:console.log});
-
+		this.headlines.start();
+		
 		// Stop fetching after 60 minutes
 		setTimeout(() => {
 			console.log('Finished.');
