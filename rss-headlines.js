@@ -117,5 +117,9 @@ module.exports = class extends Events {
 		}	
 	}
 
+	cancel() {
+		this.stop();
+	}
+
 }
 
